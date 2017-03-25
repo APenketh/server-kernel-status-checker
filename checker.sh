@@ -22,7 +22,7 @@ kernelCheck()   {
                 latestNewKernel=$(echo $latestKernel | awk '{print $4}')
                 latestNewKernel="kernel-$latestNewKernel"
                 if [ "$currentKernel" != "$latestNewKernel" ] ; then
-                        echo "    Their Is A Newer Kernel Avalible To Download"
+                        echo "    Their Is A Newer Kernel Avalible To Download:"
                         echo "        Server is on the Kernel version:          $currentKernel"
                         echo "        Latest Kernel available via download is:  $latestNewKernel"
                 else
@@ -52,9 +52,11 @@ yumCheck()      {
         echo "    Yum Exclusions:"
         if [[ ! -f /etc/yum.conf ]]; then
                 echo "        Cannot locate your yum configuration file to check for exclusions"
-        else
-                yumExcludesCheck=$(grep "exclude=" /etc/yum.conf)
+        elif grep --quiet ^exclude= /etc/yum.conf; then
+                yumExcludesCheck=$(grep ^exclude= /etc/yum.conf)
                 echo "        You currently have the following exclusions set in your yum configuration: $yumExcludesCheck"
+        else
+                echo "        You Have No Exclusions Set Up"
         fi
                 }
 
