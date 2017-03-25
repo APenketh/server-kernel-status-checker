@@ -7,13 +7,23 @@ Currently supports RHEL/CentOS 6 & 7
 Example Output:
 
 ```
-Server : example.localhost
+---------------------
+Server Name: localhost
+---------------------
+Yum Status:
+---------------------
+    Nightly Yum Update Is Disabled
+    The last update occoured: Mar 15
 
+    Yum Exclusions:
+        You currently have the following exclusions set in your yum configuration: exclude=atop*
+---------------------
 Kernel Version Status:
 ---------------------
-Server Kernel Is Not Running On The Latest Version
-    Server is on the Kernel version:      3.10.0-514.6.1.el7.x86_64
-    Latest Kernel installed is:           kernel-3.10.0-514.10.2.el7.x86_64
+    Their Is A Newer Kernel Avalible To Download:
+        Server is on the Kernel version:          kernel-3.10.0-327.36.3.el7.x86_64
+        Latest Kernel available via download is:  kernel-3.10.0-514.10.2.el7
+---------------------
 ```
 
 Note: This script is very much in a development phase and although has been tested to work it is understood that you will run it at your own risk.
