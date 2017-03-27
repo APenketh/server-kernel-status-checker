@@ -52,6 +52,8 @@ yumCheck()      {
         echo "    Yum Exclusions:"
         if [[ ! -f /etc/yum.conf ]]; then
                 echo "        Cannot locate your yum configuration file to check for exclusions"
+        elif grep --quiet ^exclude=$ /etc/yum.conf; then
+                echo "        You Have No Exclusions Set Up"
         elif grep --quiet ^exclude= /etc/yum.conf; then
                 yumExcludesCheck=$(grep ^exclude= /etc/yum.conf)
                 echo "        You currently have the following exclusions set in your yum configuration: $yumExcludesCheck"
