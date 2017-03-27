@@ -12,7 +12,7 @@ kernelCheck()   {
         echo "---------------------"
         if [ "$latestKernel" == "Error: No matching Packages to list" ] ; then
                 if [ "$currentKernel" == "$latestInstalledKernel" ] ; then
-                        echo "    Server Kernel Is On The Lastest Version: $currentKernel"
+                        echo "    Server Kernel Is On The Latest Version: $currentKernel"
                 else
                         echo "    Server Kernel Is Not Running On The Latest Version"
                         echo "        Server is on the Kernel version:      $currentKernel"
