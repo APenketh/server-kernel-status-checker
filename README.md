@@ -26,4 +26,9 @@ Kernel Version Status:
 ---------------------
 ```
 
+### Usage:
+You can run this script stright from your command line by running the following.
+```
+curl https://raw.githubusercontent.com/APenketh/yum-kernel-status-checker/master/checker.sh | sh
+```
 Note: This script is very much in a development phase and although has been tested to work it is understood that you will run it at your own risk.
