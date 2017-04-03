@@ -44,7 +44,7 @@ yumCheck()      {
                 echo "    Can't find the yum log to check when the last update occoured"
         else
                 lastUpdateCheck=$(tail -n1 /var/log/yum.log | awk '{print $1, $2}')
-                echo "    The last update occoured: $lastUpdateCheck"
+                echo "    The last update occurred: $lastUpdateCheck"
         fi
 
         echo ""
