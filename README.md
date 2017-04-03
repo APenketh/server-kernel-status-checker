@@ -13,7 +13,7 @@ Server Name: localhost
 Yum Status:
 ---------------------
     Nightly Yum Update Is Disabled
-    The last update occoured: Mar 15
+    The last update occurred: Mar 15
 
     Yum Exclusions:
         You currently have the following exclusions set in your yum configuration: exclude=atop*
