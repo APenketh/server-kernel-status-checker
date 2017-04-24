@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import yum
+import os, yum, time, socket, sys, platform
 
 yumB = yum.YumBase()
 serverHostname = socket.gethostname()
