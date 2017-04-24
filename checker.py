@@ -3,20 +3,20 @@
 import yum
 
 yumB = yum.YumBase()
-
-def kernelCheck():
-	print yumB.conf.logfile
-
-	print yumB.conf.config_file_path
+serverHostname = socket.gethostname()
 
 def yumCheck():
-	print yumB.conf.logfile
+        echo "Yum Status:"
+        echo "---------------------"
+
+def kernelCheck():
+        print "Kernel Version Status:"
+        print "---------------------"
 	
-if __name__ == '__main__':
-	print "---------------------"
-	print "Server Name: $serverHostname"
-	print "---------------------"
-	yumCheck()
-	print "---------------------"
-	kernelCheck()
-	print "---------------------"
+print "---------------------"
+print "Server Name:", serverHostname
+print "---------------------"
+yumCheck()
+print "---------------------"
+kernelCheck()
+print "---------------------"
