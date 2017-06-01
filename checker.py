@@ -24,16 +24,8 @@ def getDist():
 def kernelCheck():
 	currentKernel = "kernel-" + platform.release()
 	latestInstalledKernel = subprocess.check_output(["rpm -q kernel | tail -n 1"], shell=True).strip()
-	#latestKernel = subprocess.call(["yum list updates kernel -q --disableexcludes=all"], shell=True, stdout=open(os.devnull, 'wb'))
-
-	#if latestKernel == 1:
-	#	latestKernel = "non"
-	#else:
-	#	latestKernel = subprocess.check_output(["yum list updates kernel -q --disableexcludes=all"], shell=True)
-
         package_list = yumB.doPackageLists(pkgnarrow='updates', patterns='', ignore_case=True)
 
-	print "**test**"
         if package_list.updates:
                 for pkg in package_list.updates:
 			if pkg == "kernel*":
@@ -41,7 +33,6 @@ def kernelCheck():
 				print latestKernel
         else:
 		latestKernel = "non"
-	print "**test**"
 
         print "Kernel Version Status:"
         print "---------------------"
@@ -49,12 +40,14 @@ def kernelCheck():
                 if currentKernel == latestInstalledKernel:
                         print "    Server Kernel Is On The Latest Version: {0}".format(currentKernel)
                 else:
-                        print "    Server Kernel Is Not Running On The Latest Version"
+                        print "    Server Kernel Is Not Running On The Latest Version:"
+			print "      You Need To Reboot The Server To Make Use Of The Latest Kernel."
                         print "        Server is on the Kernel version:      {0}".format(currentKernel)
                         print "        Latest Kernel installed is:           {0}".format(latestInstalledKernel)
         else:
                 if currentKernel != latestNewKernel:
                         print "    Their Is A Newer Kernel Avalible To Download:"
+			print "      You Need To Download The Latest Kernel And Reboot The Server."
                         print "        Server is on the Kernel version:          {0}".format(currentKernel)
                         print "        Latest Kernel available via download is:  {0}".format(latestNewKernel)
                 else:
@@ -72,11 +65,11 @@ def yumCheck():
                 for pkg in package_list.updates:
                         print pkg
         else:
-                print "Their Are No Avalible Updates On This Server, You Are Up to Date"
+                print "    Their Are No Avalible Updates On This Server, You Are Up to Date"
 
         for old in yumB.history.old():
                 if "Update" in (hpkg.state for hpkg in old.trans_data):
-                        print "The last update occurred:", time.ctime(old.beg_timestamp)
+                        print "    The last update occurred:", time.ctime(old.beg_timestamp)
                         break
 
         print ""
@@ -92,7 +85,7 @@ print "---------------------"
 print "Server Name:", serverHostname
 print "Operating System Version:", osVersion, platform.linux_distribution()[1]
 print "---------------------"
-kernelCheck()
-print "---------------------"
 yumCheck()
+print "---------------------"
+kernelCheck()
 print "---------------------"
