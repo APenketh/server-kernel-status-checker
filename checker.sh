@@ -14,7 +14,8 @@ kernelCheck()   {
                 if [ "$currentKernel" == "$latestInstalledKernel" ] ; then
                         echo "    Server Kernel Is On The Latest Version: $currentKernel"
                 else
-                        echo "    Server Kernel Is Not Running On The Latest Version"
+                        echo "    Server Kernel Is Not Running On The Latest Version:"
+                        echo "        You Need To Reboot The Server To Make Use Of The Latest Kernel."
                         echo "        Server is on the Kernel version:      $currentKernel"
                         echo "        Latest Kernel installed is:           $latestInstalledKernel"
                 fi
@@ -23,6 +24,7 @@ kernelCheck()   {
                 latestNewKernel="kernel-$latestNewKernel"
                 if [ "$currentKernel" != "$latestNewKernel" ] ; then
                         echo "    Their Is A Newer Kernel Avalible To Download:"
+                        echo "        You Need To Download The Latest Kernel And Reboot The Server."
                         echo "        Server is on the Kernel version:          $currentKernel"
                         echo "        Latest Kernel available via download is:  $latestNewKernel"
                 else
