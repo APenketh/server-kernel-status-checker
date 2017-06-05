@@ -40,14 +40,12 @@ def kernelCheck():
                 if currentKernel == latestInstalledKernel:
                         print "    Server Kernel Is On The Latest Version: {0}".format(currentKernel)
                 else:
-                        print "    Server Kernel Is Not Running On The Latest Version:"
-			print "      You Need To Reboot The Server To Make Use Of The Latest Kernel."
+			print "    You Need To Reboot The Server To Make Use Of The Latest Kernel."
                         print "        Server is on the Kernel version:      {0}".format(currentKernel)
                         print "        Latest Kernel installed is:           {0}".format(latestInstalledKernel)
         else:
                 if currentKernel != latestNewKernel:
-                        print "    Their Is A Newer Kernel Avalible To Download:"
-			print "      You Need To Download The Latest Kernel And Reboot The Server."
+			print "    You Need To Download The Latest Kernel And Reboot The Server."
                         print "        Server is on the Kernel version:          {0}".format(currentKernel)
                         print "        Latest Kernel available via download is:  {0}".format(latestNewKernel)
                 else:
@@ -56,28 +54,27 @@ def kernelCheck():
 def yumCheck():
         yumConfFile = yumB.conf.config_file_path
 	package_list = yumB.doPackageLists(pkgnarrow='updates', patterns='', ignore_case=True)
+	totalUpdatesAv = 0
 
         print "Yum Status:"
         print "---------------------"
 
         if package_list.updates:
-                print 'updates available'
                 for pkg in package_list.updates:
-                        print pkg
+			totalUpdatesAv += 1
+		print "    Avalible Updates:\t{0}".format(totalUpdatesAv)
         else:
-                print "    Their Are No Avalible Updates On This Server, You Are Up to Date"
+                print "    Avalible Updates:\tZero. You Are Up To Date"
 
         for old in yumB.history.old():
                 if "Update" in (hpkg.state for hpkg in old.trans_data):
-                        print "    The last update occurred:", time.ctime(old.beg_timestamp)
+                        print "    Last Update Time:\t", time.ctime(old.beg_timestamp)
                         break
 
-        print ""
-        print "    Yum Exclusions:"
         if os.path.exists("{0}".format(yumConfFile)):
-                print "found it"
+                print "    Yum Exclusions:\t"
         else:
-                print "        Cannot locate the yum configuration file to check for exclusions"
+                print "    Yum Exclusions:\tCannot Locate The Yum Configuration File, Please Check Manually."
 
 getDist()
 	
