@@ -7,7 +7,6 @@ yumB = yum.YumBase()
 yumB.preconf.debuglevel = 0
 serverHostname = socket.gethostname()
 
-
 def getDist():
 	distName = platform.linux_distribution()[0]
 	global osVersion
@@ -22,32 +21,25 @@ def getDist():
 		exit()
 
 def kernelCheck():
-	currentKernel = "kernel-" + platform.release()
-	latestInstalledKernel = subprocess.check_output(["rpm -q kernel | tail -n 1"], shell=True).strip()
-        package_list = yumB.doPackageLists(pkgnarrow='updates', patterns='', ignore_case=True)
-
-        if package_list.updates:
-                for pkg in package_list.updates:
-			if pkg == "kernel*":
-				latestKernel = pkg
-				print latestKernel
-        else:
-		latestKernel = "non"
+        currentKernel = "kernel-" + platform.release()
+        latestInstalledKernel = subprocess.check_output(["rpm -q kernel | tail -n 1"], shell=True).strip()
+        latestKernel = subprocess.check_output(["yum list updates kernel -q --disableexcludes=all | grep -vi 'updated' | awk {'print $2'} 2>&1"
+], shell=True, stderr=open('/dev/null', 'w')).strip()
 
         print "Kernel Version Status:"
         print "---------------------"
-        if latestKernel == "non":
+        if latestKernel == "":
                 if currentKernel == latestInstalledKernel:
                         print "    Server Kernel Is On The Latest Version: {0}".format(currentKernel)
                 else:
-			print "    You Need To Reboot The Server To Make Use Of The Latest Kernel."
+                        print "    You Need To Reboot The Server To Make Use Of The Latest Kernel."
                         print "        Server is on the Kernel version:      {0}".format(currentKernel)
                         print "        Latest Kernel installed is:           {0}".format(latestInstalledKernel)
         else:
-                if currentKernel != latestNewKernel:
-			print "    You Need To Download The Latest Kernel And Reboot The Server."
+                if currentKernel != latestKernel:
+                        print "    You Need To Download The Latest Kernel And Reboot The Server."
                         print "        Server is on the Kernel version:          {0}".format(currentKernel)
-                        print "        Latest Kernel available via download is:  {0}".format(latestNewKernel)
+                        print "        Latest Kernel available via download is:  kernel-{0}.x86_64".format(latestKernel)
                 else:
                         print ""
 
