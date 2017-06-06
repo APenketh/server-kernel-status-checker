@@ -35,10 +35,8 @@ def kernelCheck():
 			return kcrr
         else:
                 if currentKernel != latestKernel:
-			kcrr = "    You Need To Download The Latest Kernel And Reboot The Server."
+			kcrr = "You Need To Download The Latest Kernel And Reboot The Server." + "\n        Server is on the Kernel version:          {0}".format(currentKernel) + "\n        Latest Kernel available via download is:  kernel-{0}.x86_64".format(latestKernel)
 			return kcrr
-                        #print "        Server is on the Kernel version:          {0}".format(currentKernel)
-                        #print "        Latest Kernel available via download is:  kernel-{0}.x86_64".format(latestKernel)
                 else:
 			return "There Was An Error Processing Your Kernels. Please Check Manually"
 
@@ -71,8 +69,8 @@ class yumCheck():
 
 class ThreeColTable(object):
 
-    MIN_WIDTH = 70
-    MAX_WIDTH = 90
+    MIN_WIDTH = 80
+    MAX_WIDTH = 100
 
     _ANSI_ESCAPE = re.compile(r'\x1b[^m]*m')
 
