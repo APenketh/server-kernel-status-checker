@@ -35,7 +35,7 @@ def kernelCheck():
 			return kcrr
         else:
                 if currentKernel != latestKernel:
-			kcrr = "You Need To Download The Latest Kernel And Reboot The Server." + "\n    Server is on the Kernel version:\t{0}".format(currentKernel) + "\n   Latest Kernel available via download is:\tkernel-{0}.x86_64".format(latestKernel)
+			kcrr = "You Need To Download The Latest Kernel And Reboot The Server." + "\n    Server is on the Kernel version:\t{0}".format(currentKernel) + "\n    Latest Kernel To Download Is:\tkernel-{0}.x86_64".format(latestKernel)
 			return kcrr
                 else:
 			return "There Was An Error Processing Your Kernels. Please Check Manually"
