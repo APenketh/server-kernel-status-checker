@@ -48,7 +48,7 @@ class yumCheck():
        		if package_list.updates:
                 	for pkg in package_list.updates:
 				totalUpdatesAv += 1
-			totalUpdatesAv = totalUpdatesAv + " Updates"
+			totalUpdatesAv = str(totalUpdatesAv) + " Updates"
 			return totalUpdatesAv
         	else:
 			totalUpdatesAv = "Zero. You Are Up To Date"
