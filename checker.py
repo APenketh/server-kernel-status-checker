@@ -63,7 +63,13 @@ class yumCheck():
 	def yumExChecker(self):
 		yumConfFile = yumB.conf.config_file_path
         	if os.path.exists("{0}".format(yumConfFile)):
-			yumExResu = "To Do"
+			if subprocess.call(["grep --quiet ^exclude=$ /etc/yum.conf"], shell=True) == False:
+				yumExResu = "You Have No Exclusions Set Up"
+			elif subprocess.call(["grep --quiet ^exclude= /etc/yum.conf"], shell=True) == False:
+				yumExcludesRes = subprocess.check_output(["grep ^exclude= /etc/yum.conf | sed 's/exclude=//' | tr '\n' ' '"], shell=True, stderr=open('/dev/null', 'w')).strip()
+				yumExResu = "{0}".format(yumExcludesRes)
+			else:
+				yumExResu = "You Have No Exclusions Set Up"
 			return yumExResu
         	else:
                 	return "Cannot Locate The Yum Configuration File, Please Check Manually."
@@ -176,7 +182,7 @@ def overview():
 
     	tbl.line('Server Name: %s' % serverHost, 'OS Version: %s' % os)
     	tbl.space(ruler=True)
-	tbl.left('Yum Status:')
+	tbl.left('Server Update Status:')
 	tbl.left('--------------')
 	tbl.left('    Avalible Updates To Download:\t%s' % yumC.updateChecker())
 	tbl.left('    Last Package Update Time:\t\t%s' % yumC.lastUpdateChecker())
