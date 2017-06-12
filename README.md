@@ -20,9 +20,10 @@ Yum Status:
 ---------------------
 Kernel Version Status:
 ---------------------
-    Their Is A Newer Kernel Avalible To Download:
-        Server is on the Kernel version:          kernel-3.10.0-327.36.3.el7.x86_64
-        Latest Kernel available via download is:  kernel-3.10.0-514.10.2.el7
+    Server Kernel Is Not Running On The Latest Version:
+        You Need To Reboot The Server To Make Use Of The Latest Kernel.
+        Server is on the Kernel version:      kernel-3.10.0-514.16.1.el7.x86_64
+        Latest Kernel installed is:           kernel-3.10.0-514.21.1.el7.x86_64
 ---------------------
 ```
 
