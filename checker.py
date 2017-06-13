@@ -11,7 +11,7 @@ def getDist():
 	distName = platform.linux_distribution()[0]
 	global osVersion
 
-	if distName.upper() in ["RHEL", "CENTOS", "FEDORA", "CENTOS LINUX"]:
+	if distName.upper() in ["RHEL", "CENTOS", "FEDORA", "CENTOS LINUX", "RED HAT ENTERPRISE LINUX SERVER"]:
 		osVersion = distName
 	elif distName.upper() in ["DEBIAN", "UBUNTU"]:
 		print "{0} Based Systems Are Currently Not Compatible With This Script.".format(distName)
