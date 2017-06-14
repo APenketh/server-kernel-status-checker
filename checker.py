@@ -2,6 +2,7 @@
 
 import os, yum, time, socket, sys, platform, rpm, subprocess, re
 from rpmUtils.miscutils import stringToVersion
+from subprocess import PIPE,Popen
 
 yumB = yum.YumBase()
 yumB.preconf.debuglevel = 0
@@ -30,14 +31,14 @@ def getDist():
 
 def kernelCheck():
         currentKernel = "kernel-" + platform.release()
-	if checkPythonInstall() == True:
-		latestInstalledKernel = subprocess.check_output(["rpm -q kernel | tail -n 1"], shell=True).strip()
-		latestKernel = subprocess.check_output(["yum list updates kernel -q --disableexcludes=all | grep -vi 'updated' | awk {'print $2'} 2>&1"], shell=True, stderr=open('/dev/null', 'w')).strip()
+        if checkPythonInstall() == True:
+                latestInstalledKernel = subprocess.check_output(["rpm -q kernel | tail -n 1"], shell=True).strip()
+                latestKernel = subprocess.check_output(["yum list updates kernel -q --disableexcludes=all | grep -vi 'updated' | awk {'print $2'} 2>&1"], shell=True, stderr=open('/dev/null', 'w')).strip()
         elif checkPythonInstall() == False:
-		latestInstalledKernelOut = Popen(["rpm -q kernel | tail -n 1"], shell=True)
-		latestInstalledKernel = latestInstalledKernelOut.communicate()[0].strip()
-		latestKernelOut = Popen(["yum list updates kernel -q --disableexcludes=all | grep -vi 'updated' | awk {'print $2'} 2>&1"], shell=True, stderr=open('/dev/null', 'w'))
-		latestKernel = latestKernelOut.communicate()[0].strip()
+                latestInstalledKernelOut = Popen(["rpm -q kernel | tail -n 1"], shell=True, stdout=PIPE)
+                latestInstalledKernel = latestInstalledKernelOut.communicate()[0].strip()
+                latestKernelOut = Popen(["yum list updates kernel -q --disableexcludes=all | grep -vi 'updated' | awk {'print $2'} 2>&1"], shell=True, stderr=open('/dev/null', 'w'), stdout=PIPE)
+                latestKernel = latestKernelOut.communicate()[0].strip()
 
         if latestKernel == "":
                 if currentKernel == latestInstalledKernel:
