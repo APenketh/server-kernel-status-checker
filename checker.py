@@ -84,7 +84,7 @@ class yumCheck():
 					yumExcludesRes = subprocess.check_output(["grep ^exclude= /etc/yum.conf | sed 's/exclude=//' | tr '\n' ' '"], shell=True, stderr=open('/dev/null', 'w')).strip()
         			elif checkPythonInstall() == False:
 					yumExcludesResOut = Popen(["grep ^exclude= /etc/yum.conf | sed 's/exclude=//' | tr '\n' ' '"], shell=True, stderr=open('/dev/null', 'w'), stdout=PIPE)
-					yumExcludesRes = yumExcludesResOut.communicate()[0].split()
+					yumExcludesRes = yumExcludesResOut.communicate()[0].strip()
 				yumExResu = "{0}".format(yumExcludesRes)
 			else:
 				yumExResu = "You Have No Exclusions Set Up"
