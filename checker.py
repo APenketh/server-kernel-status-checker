@@ -6,6 +6,16 @@ from rpmUtils.miscutils import stringToVersion
 yumB = yum.YumBase()
 yumB.preconf.debuglevel = 0
 serverHostname = socket.gethostname()
+requiredVersion = (2,7)
+
+def checkInstallation(rv):
+    currentVersion = sys.version_info
+    if currentVersion[0] == rv[0] and currentVersion[1] >= rv[1]:
+        pass
+    else:
+	print "This script is currently only compatiable with Python version 2.7+. You are currently running version {0}".format(currentVersion)
+	exit()
+    return 0
 
 def getDist():
 	distName = platform.linux_distribution()[0]
@@ -195,5 +205,6 @@ def overview():
     	print tbl.render()
 
 if __name__ == '__main__':
+	checkInstallation( requiredVersion )
 	getDist()
         overview()
