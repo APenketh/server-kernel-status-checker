@@ -13,7 +13,7 @@ def checkInstallation(rv):
     if currentVersion[0] == rv[0] and currentVersion[1] >= rv[1]:
         pass
     else:
-	print "This script is currently only compatiable with Python version 2.7+. You are currently running version {0}".format(currentVersion)
+	print "This script is currently only compatiable with Python version 2.7+. You are currently running version {0}.{1}.{2}".format(currentVersion[0], currentVersion[1], currentVersion[2])
 	exit()
     return 0
 
