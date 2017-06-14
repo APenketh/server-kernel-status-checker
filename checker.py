@@ -6,16 +6,14 @@ from rpmUtils.miscutils import stringToVersion
 yumB = yum.YumBase()
 yumB.preconf.debuglevel = 0
 serverHostname = socket.gethostname()
-requiredVersion = (2,7)
 
-def checkInstallation(rv):
-    currentVersion = sys.version_info
-    if currentVersion[0] == rv[0] and currentVersion[1] >= rv[1]:
-        pass
-    else:
-	print "This script is currently only compatiable with Python version 2.7+. You are currently running version {0}.{1}.{2}".format(currentVersion[0], currentVersion[1], currentVersion[2])
-	exit()
-    return 0
+def checkPythonInstall():
+	versionToCheck = (2,7)
+    	currentVersion = sys.version_info
+    	if currentVersion[0] >= versionToCheck[0] and currentVersion[1] >= versionToCheck[1]:
+        	return True
+    	else:
+		return False
 
 def getDist():
 	distName = platform.linux_distribution()[0]
@@ -32,9 +30,14 @@ def getDist():
 
 def kernelCheck():
         currentKernel = "kernel-" + platform.release()
-        latestInstalledKernel = subprocess.check_output(["rpm -q kernel | tail -n 1"], shell=True).strip()
-        latestKernel = subprocess.check_output(["yum list updates kernel -q --disableexcludes=all | grep -vi 'updated' | awk {'print $2'} 2>&1"
-], shell=True, stderr=open('/dev/null', 'w')).strip()
+	if checkPythonInstall() == True:
+		latestInstalledKernel = subprocess.check_output(["rpm -q kernel | tail -n 1"], shell=True).strip()
+		latestKernel = subprocess.check_output(["yum list updates kernel -q --disableexcludes=all | grep -vi 'updated' | awk {'print $2'} 2>&1"], shell=True, stderr=open('/dev/null', 'w')).strip()
+        elif checkPythonInstall() == False:
+		latestInstalledKernelOut = Popen(["rpm -q kernel | tail -n 1"], shell=True)
+		latestInstalledKernel = latestInstalledKernelOut.communicate()[0].strip()
+		latestKernelOut = Popen(["yum list updates kernel -q --disableexcludes=all | grep -vi 'updated' | awk {'print $2'} 2>&1"], shell=True, stderr=open('/dev/null', 'w'))
+		latestKernel = latestKernelOut.communicate()[0].strip()
 
         if latestKernel == "":
                 if currentKernel == latestInstalledKernel:
@@ -76,7 +79,11 @@ class yumCheck():
 			if subprocess.call(["grep --quiet ^exclude=$ /etc/yum.conf"], shell=True) == False:
 				yumExResu = "You Have No Exclusions Set Up"
 			elif subprocess.call(["grep --quiet ^exclude= /etc/yum.conf"], shell=True) == False:
-				yumExcludesRes = subprocess.check_output(["grep ^exclude= /etc/yum.conf | sed 's/exclude=//' | tr '\n' ' '"], shell=True, stderr=open('/dev/null', 'w')).strip()
+				if checkPythonInstall() == True:
+					yumExcludesRes = subprocess.check_output(["grep ^exclude= /etc/yum.conf | sed 's/exclude=//' | tr '\n' ' '"], shell=True, stderr=open('/dev/null', 'w')).strip()
+        			elif checkPythonInstall() == False:
+					yumExcludesResOut = Popen(["grep ^exclude= /etc/yum.conf | sed 's/exclude=//' | tr '\n' ' '"], shell=True, stderr=open('/dev/null', 'w'))
+					yumExcludesRes = yumExcludesResOut.communicate()[0].split()
 				yumExResu = "{0}".format(yumExcludesRes)
 			else:
 				yumExResu = "You Have No Exclusions Set Up"
@@ -205,6 +212,5 @@ def overview():
     	print tbl.render()
 
 if __name__ == '__main__':
-	checkInstallation( requiredVersion )
 	getDist()
         overview()
