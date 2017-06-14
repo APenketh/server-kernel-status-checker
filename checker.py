@@ -94,102 +94,101 @@ class yumCheck():
 
 class ThreeColTable(object):
 
-    MIN_WIDTH = 80
-    MAX_WIDTH = 95
+	MIN_WIDTH = 80
+	MAX_WIDTH = 95
 
-    _ANSI_ESCAPE = re.compile(r'\x1b[^m]*m')
+    	_ANSI_ESCAPE = re.compile(r'\x1b[^m]*m')
 
-    def __init__(self, width=None):
-        self.width = width
-        self._left = []
-        self._center = []
-        self._right = []
+    	def __init__(self, width=None):
+        	self.width = width
+        	self._left = []
+        	self._center = []
+        	self._right = []
 
-    def _raw(self, s):
-        return self._ANSI_ESCAPE.sub('', s)
+    	def _raw(self, s):
+        	return self._ANSI_ESCAPE.sub('', s)
 
-    def _trim(self, s, maxlen, suffix='...'):
-        rawlen = len(self._raw(s))
-        if rawlen <= maxlen:
-            return s
-        markup = list(reversed([(m.start(), m.end()) for m in self._ANSI_ESCAPE.finditer(s)]))
-        end = len(s)
-        cut = rawlen-maxlen+len(suffix)
-        while len(markup):
-            s1, s2 = s[:end-min(end-markup[0][1], cut)], s[end:]
-            cut -= end-markup[0][1]
-            if cut < 0:
-                s = s1+suffix+s2
-                break
-            s = s1+s2
-            end = markup[0][0]
-            markup.pop(0)
-        return s
+    	def _trim(self, s, maxlen, suffix='...'):
+        	rawlen = len(self._raw(s))
+        	if rawlen <= maxlen:
+            		return s
+        	markup = list(reversed([(m.start(), m.end()) for m in self._ANSI_ESCAPE.finditer(s)]))
+        	end = len(s)
+        	cut = rawlen-maxlen+len(suffix)
+        	while len(markup):
+            		s1, s2 = s[:end-min(end-markup[0][1], cut)], s[end:]
+            		cut -= end-markup[0][1]
+            		if cut < 0:
+                		s = s1+suffix+s2
+                		break
+            		s = s1+s2
+            		end = markup[0][0]
+            		markup.pop(0)
+        	return s
 
-    def _lines(self):
-        height = max(len(self._left), len(self._center), len(self._right))
-        for i in range(height):
-            left = center = right = ''
-            if i < len(self._left):
-                left = self._left[i]
-            if i < len(self._center):
-                center = self._center[i]
-            if i < len(self._right):
-                right = self._right[i]
-            yield (left, center, right)
+    	def _lines(self):
+        	height = max(len(self._left), len(self._center), len(self._right))
+        	for i in range(height):
+            		left = center = right = ''
+            		if i < len(self._left):
+                		left = self._left[i]
+           		if i < len(self._center):
+                		center = self._center[i]
+            		if i < len(self._right):
+                		right = self._right[i]
+            		yield (left, center, right)
 
-    def _compute_width(self):
-        mwidth = 0
-        for l,c,r in self._lines():
-            width = len(self._raw(l))+len(self._raw(c))+len(self._raw(r))
-            if c or r:
-                width += 8
-            mwidth = max(mwidth, width)
-        return max(self.MIN_WIDTH, min(self.MAX_WIDTH, mwidth))
+    	def _compute_width(self):
+        	mwidth = 0
+        	for l,c,r in self._lines():
+            		width = len(self._raw(l))+len(self._raw(c))+len(self._raw(r))
+            		if c or r:
+                		width += 8
+            		mwidth = max(mwidth, width)
+        	return max(self.MIN_WIDTH, min(self.MAX_WIDTH, mwidth))
 
-    def left(self, s):
-        if not isinstance(s, list):
-            s = [str(s)]
-        self._left.extend(s)
+    	def left(self, s):
+        	if not isinstance(s, list):
+            		s = [str(s)]
+        	self._left.extend(s)
 
-    def right(self, s, alignright=False):
-        if not isinstance(s, list):
-            s = [str(s)]
-        if not alignright:
-            maxlen = max([len(self._raw(x)) for x in s])
-            s = [x + (maxlen-len(self._raw(x)))*' ' for x in s]
-        self._right.extend(s)
+    	def right(self, s, alignright=False):
+        	if not isinstance(s, list):
+            		s = [str(s)]
+        	if not alignright:
+            		maxlen = max([len(self._raw(x)) for x in s])
+            		s = [x + (maxlen-len(self._raw(x)))*' ' for x in s]
+        	self._right.extend(s)
 
-    def line(self, left, right):
-        self.left(left)
-        self.right(right)
+    	def line(self, left, right):
+        	self.left(left)
+        	self.right(right)
 
-    def space(self, ruler=False):
-        height = max(len(self._left), len(self._center), len(self._right))
-        for col in (self._left, self._center, self._right):
-            col.extend((height+1-len(col))*[''])
-        if ruler:
-            self._left[-1] = '---'
+    	def space(self, ruler=False):
+        	height = max(len(self._left), len(self._center), len(self._right))
+        	for col in (self._left, self._center, self._right):
+            		col.extend((height+1-len(col))*[''])
+        	if ruler:
+            		self._left[-1] = '---'
 
-    def render(self):
-        if self.width is None:
-            self.width = self._compute_width()
-
-        ret = []
-        ret.append(self.width * '=')
-        for left, center, right in self._lines():
-            if left == '---':
-                ret.append(self.width * '-')
-                continue
-            if not center and not right:
-                ret.append(self._trim(left, self.width))
-                continue
-            padding1 = max(4, (self.width-len(self._raw(center)))/2-len(self._raw(left))) * ' '
-            padding2 = max(4, self.width-len(self._raw(left))-len(padding1)-len(self._raw(center))-len(self._raw(right))) * ' '
-            line = left + padding1 + center + padding2 + right
-            ret.append(line)
-        ret.append(self.width * '=')
-        return '\n'.join(ret)
+    	def render(self):
+        	if self.width is None:
+            		self.width = self._compute_width()
+        	ret = []
+        	ret.append(self.width * '=')
+        	for left, center, right in self._lines():
+            		if left == '---':
+                		ret.append(self.width * '-')
+                		continue
+            		if not center and not right:
+                		ret.append(self._trim(left, self.width))
+                		continue
+            		padding1 = max(4, (self.width-len(self._raw(center)))/2-len(self._raw(left))) * ' '
+            		padding2 = max(4, self.width-len(self._raw(left))-len(padding1)-len(self._raw(center))-len(self._raw(right))) * ' '
+            		line = left + padding1 + center + padding2 + right
+            		ret.append(line)
+        	ret.append(self.width * '=')
+        	return '\n'.join(ret)
 
 def overview():
 	serverHost = serverHostname
