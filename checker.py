@@ -91,8 +91,6 @@ class yumCheck():
         for old in yumB.history.old():
             if "Update" in (hpkg.state for hpkg in old.trans_data):
                 lucr = time.ctime(old.beg_timestamp)
-            else:
-                lucr = "There Is No History Of Updates"
         return lucr
 
     """Checks for any exclusions defined within the yum configuration file."""
