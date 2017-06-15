@@ -17,10 +17,7 @@ serverHostname = socket.gethostname()
 def checkPythonInstall():
     versionToCheck = (2, 7)
     currentVersion = sys.version_info
-    if currentVersion[0] >= versionToCheck[0] and currentVersion[1] >= versionToCheck[1]:
-        return True
-    else:
-        return False
+    return bool(True if currentVersion[0] >= versionToCheck[0] and currentVersion[1] >= versionToCheck[1] else False)
 
 def getDist():
     distName = platform.linux_distribution()[0]
