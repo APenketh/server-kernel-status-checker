@@ -1,5 +1,9 @@
 # Check The Current Status Of Server Updates & The Kernel
 
+![](https://badges.fyi/github/license/APenketh/server-kernel-status-checker)
+![](https://badges.fyi/github/latest-release/APenketh/server-kernel-status-checker)
+![](https://badges.fyi/github/downloads/APenketh/server-kernel-status-checker)
+
 This is a python script to check the status of both the server updates and the kernel, this allows you to easily identify if your server requires a reboot to get onto the latest kernel version or needs to download a new kernel if it is avalible from your package manager.
 
 Currently is tested in the following Operating Systems: RHEL/CentOS 6 & 7.
